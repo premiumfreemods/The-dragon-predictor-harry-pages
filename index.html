@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drago 3.0 Access</title>
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #000000, #03224c);
+  color: white;
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+input {
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  width: 70%;
+  margin-bottom: 20px;
+  font-size: 1em;
+}
+button {
+  margin: 10px;
+  padding: 12px 25px;
+  font-size: 1em;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+  border: 2px solid white;
+  background-color: transparent;
+  color: white;
+}
+button:hover {
+  background-color: white;
+  color: black;
+}
+</style>
+</head>
+<body>
+<h1>🔑 Verify Your Access Key</h1>
+<p>Enter your key to continue</p>
+<input type="text" id="userKey" placeholder="Enter Access Key">
+<button onclick="validateKey()">Validate Key</button>
+
+<script>
+const DB_URL = "https://iiswy-b772a-default-rtdb.firebaseio.com/keys.json";
+
+async function validateKey() {
+  const userKey = document.getElementById("userKey").value.trim();
+  if (!userKey) return alert("Enter your key");
+
+  const res = await fetch(DB_URL);
+  const data = await res.json();
+  let valid = false;
+
+  for (const id in data) {
+    const info = data[id];
+    if (info.key === userKey) {
+      if (Date.now() < info.expiry && info.active) {
+        valid = true;
+        break;
+      } else {
+        alert("Key expired or inactive");
+        return;
+      }
+    }
+  }
+
+  if (valid) {
+    alert("✅ Access Granted! Welcome to Drago 3.0");
+    window.location.href = "https://your-main-page.com"; // change to your main page
+  } else {
+    alert("❌ Invalid Key");
+  }
+}
+</script>
+</body>
+</html>
