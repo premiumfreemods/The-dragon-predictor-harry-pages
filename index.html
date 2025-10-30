@@ -21,6 +21,7 @@
             --light: #f8f9fa;
             --success: #28a745;
             --warning: #ffc107;
+            --info: #17a2b8;
         }
 
         body {
@@ -233,6 +234,79 @@
         .status-pending {
             background: rgba(255, 193, 7, 0.2);
             color: var(--warning);
+        }
+
+        .status-processing {
+            background: rgba(23, 162, 184, 0.2);
+            color: var(--info);
+        }
+
+        /* Withdrawal History Section */
+        .withdrawal-history {
+            padding: 80px 0;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .withdrawal-history-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .withdrawal-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .withdrawal-history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .withdrawal-history-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .withdrawal-history-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .withdrawal-history-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .withdrawal-history-date {
+            color: #b8b8d0;
+            font-size: 14px;
+        }
+
+        .withdrawal-history-method {
+            color: #b8b8d0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .withdrawal-history-status {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
         }
 
         /* Data Selling Section */
@@ -656,6 +730,12 @@
                 gap: 15px;
                 text-align: center;
             }
+
+            .withdrawal-history-item {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -695,12 +775,12 @@
         </div>
     </section>
 
-    <!-- Transition History Section -->
+    <!-- Transaction History Section -->
     <section class="history">
         <div class="container">
             <h2 class="section-title">Transaction History</h2>
             <div class="history-container">
-                <div class="history-list">
+                <div class="history-list" id="transaction-history-list">
                     <div class="history-item">
                         <div class="history-info">
                             <div class="history-amount">₹50</div>
@@ -853,6 +933,57 @@
         </div>
     </section>
 
+    <!-- Withdrawal History Section -->
+    <section class="withdrawal-history">
+        <div class="container">
+            <h2 class="section-title">Withdrawal History</h2>
+            <div class="withdrawal-history-container">
+                <div class="withdrawal-history-list" id="withdrawal-history-list">
+                    <div class="withdrawal-history-item">
+                        <div class="withdrawal-history-info">
+                            <div class="withdrawal-history-amount">₹150</div>
+                            <div class="withdrawal-history-date">June 18, 2023 - 09:45</div>
+                            <div class="withdrawal-history-method">
+                                <i class="fab fa-google-pay"></i> Google Pay
+                            </div>
+                        </div>
+                        <div class="withdrawal-history-status status-completed">Completed</div>
+                    </div>
+                    <div class="withdrawal-history-item">
+                        <div class="withdrawal-history-info">
+                            <div class="withdrawal-history-amount">₹75</div>
+                            <div class="withdrawal-history-date">June 10, 2023 - 14:20</div>
+                            <div class="withdrawal-history-method">
+                                <i class="fas fa-mobile-alt"></i> PhonePe
+                            </div>
+                        </div>
+                        <div class="withdrawal-history-status status-completed">Completed</div>
+                    </div>
+                    <div class="withdrawal-history-item">
+                        <div class="withdrawal-history-info">
+                            <div class="withdrawal-history-amount">₹200</div>
+                            <div class="withdrawal-history-date">June 5, 2023 - 11:30</div>
+                            <div class="withdrawal-history-method">
+                                <i class="fas fa-wallet"></i> Paytm
+                            </div>
+                        </div>
+                        <div class="withdrawal-history-status status-completed">Completed</div>
+                    </div>
+                    <div class="withdrawal-history-item">
+                        <div class="withdrawal-history-info">
+                            <div class="withdrawal-history-amount">₹100</div>
+                            <div class="withdrawal-history-date">June 1, 2023 - 16:15</div>
+                            <div class="withdrawal-history-method">
+                                <i class="fas fa-university"></i> Bank Transfer
+                            </div>
+                        </div>
+                        <div class="withdrawal-history-status status-processing">Processing</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -890,6 +1021,22 @@
         </div>
     </div>
 
+    <!-- Withdrawal Success Popup -->
+    <div class="popup-overlay" id="withdrawal-popup">
+        <div class="popup">
+            <div class="popup-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Withdrawal Successful!</h2>
+            <p>Your withdrawal request has been processed successfully.</p>
+            <div class="popup-amount" id="popup-withdrawal-amount">₹0</div>
+            <p>The amount will be credited to your account within 24 hours.</p>
+            <div>
+                <button class="btn btn-popup btn-popup-primary" id="popup-ok">OK</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Network selection
         const networkOptions = document.querySelectorAll('.network-option');
@@ -922,6 +1069,11 @@
         const popupWithdraw = document.getElementById('popup-withdraw');
         const withdrawBtn = document.getElementById('withdraw-btn');
         const startSellingBtn = document.getElementById('start-selling-btn');
+        const withdrawalPopup = document.getElementById('withdrawal-popup');
+        const popupWithdrawalAmount = document.getElementById('popup-withdrawal-amount');
+        const popupOk = document.getElementById('popup-ok');
+        const transactionHistoryList = document.getElementById('transaction-history-list');
+        const withdrawalHistoryList = document.getElementById('withdrawal-history-list');
 
         let isSelling = false;
         let dataSoldValue = 0;
@@ -969,6 +1121,11 @@
             walletAmount += earningsValue;
             walletBalance.textContent = `₹${walletAmount}`;
             
+            // Add transaction to history
+            if (earningsValue > 0) {
+                addTransactionToHistory(earningsValue);
+            }
+            
             // Show popup with earnings
             popupEarnings.textContent = `₹${earningsValue}`;
             earningsPopup.classList.add('active');
@@ -1004,9 +1161,15 @@
         withdrawalForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const upiId = document.getElementById('upi-id').value;
+            const selectedPaymentMethod = document.querySelector('.payment-method.active .payment-name').textContent;
             
             if (upiId && walletAmount > 0) {
-                alert(`Withdrawal request submitted for ₹${walletAmount} to ${upiId}. Please wait up to 24 hours for processing.`);
+                // Add withdrawal to history
+                addWithdrawalToHistory(walletAmount, selectedPaymentMethod);
+                
+                // Show success popup
+                popupWithdrawalAmount.textContent = `₹${walletAmount}`;
+                withdrawalPopup.classList.add('active');
                 
                 // Reset wallet
                 walletAmount = 0;
@@ -1019,6 +1182,85 @@
                 alert('Please enter a valid UPI ID.');
             }
         });
+
+        // Close withdrawal popup
+        popupOk.addEventListener('click', () => {
+            withdrawalPopup.classList.remove('active');
+        });
+
+        // Function to add transaction to history
+        function addTransactionToHistory(amount) {
+            const now = new Date();
+            const dateString = now.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            const transactionItem = document.createElement('div');
+            transactionItem.className = 'history-item';
+            transactionItem.innerHTML = `
+                <div class="history-info">
+                    <div class="history-amount">₹${amount}</div>
+                    <div class="history-date">${dateString} - ${timeString}</div>
+                </div>
+                <div class="history-status status-completed">Completed</div>
+            `;
+            
+            transactionHistoryList.prepend(transactionItem);
+        }
+
+        // Function to add withdrawal to history
+        function addWithdrawalToHistory(amount, method) {
+            const now = new Date();
+            const dateString = now.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            // Get the appropriate icon for the payment method
+            let paymentIcon = '';
+            switch(method) {
+                case 'Google Pay':
+                    paymentIcon = '<i class="fab fa-google-pay"></i>';
+                    break;
+                case 'PhonePe':
+                    paymentIcon = '<i class="fas fa-mobile-alt"></i>';
+                    break;
+                case 'Paytm':
+                    paymentIcon = '<i class="fas fa-wallet"></i>';
+                    break;
+                case 'Bank Transfer':
+                    paymentIcon = '<i class="fas fa-university"></i>';
+                    break;
+                default:
+                    paymentIcon = '<i class="fas fa-money-bill-wave"></i>';
+            }
+            
+            const withdrawalItem = document.createElement('div');
+            withdrawalItem.className = 'withdrawal-history-item';
+            withdrawalItem.innerHTML = `
+                <div class="withdrawal-history-info">
+                    <div class="withdrawal-history-amount">₹${amount}</div>
+                    <div class="withdrawal-history-date">${dateString} - ${timeString}</div>
+                    <div class="withdrawal-history-method">
+                        ${paymentIcon} ${method}
+                    </div>
+                </div>
+                <div class="withdrawal-history-status status-completed">Completed</div>
+            `;
+            
+            withdrawalHistoryList.prepend(withdrawalItem);
+        }
     </script>
 </body>
-</html>
+                            </html>
